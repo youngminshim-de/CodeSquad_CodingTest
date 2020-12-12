@@ -71,12 +71,12 @@ class RubiksCube implements Face{
 				case "U'": rightMove(ary,start);break;
 				case "D": rightMove(ary,end);break;
 				case "D'": leftMove(ary,end);break;
-				case "L":
-				case "L'":
-				case "R":
-				case "R'":
-				case "F":
-				case "F'":
+				case "L": downMove(ary,start);break;
+				case "L'": upMove(ary,start);break;
+				case "R": upMove(ary,end);break;
+				case "R'": downMove(ary,end);break;
+				case "F": fMove(ary,start);break;
+				case "F'":f_Move(ary,start);break;
 				case "B":
 				case "B'":
 				case "Q":
@@ -85,32 +85,94 @@ class RubiksCube implements Face{
 		}
 	}
 	public void leftMove(char[][][] ary,int startRow) {
+//		for(int i=LEFT;i<BACK;i++) {
+//			for(int j=0;j<ary[i][startRow].length;j++) {
+//				if(i==LEFT) {
+//					temp[j]=ary[i][startRow][j];
+//				}
+//				ary[i][startRow][j]=ary[i+1][startRow][j];
+//			}
+//		}
+//		for(int i=0; i<3; i++) {
+//			ary[BACK][startRow][i]=temp[i];
+//		}
+		// 이중 for문보다 간결하여 가독성이 좋아보임
 		char[] temp=new char[3];
-		for(int i=LEFT;i<BACK;i++) {
-			for(int j=0;j<ary[i][startRow].length;j++) {
-				if(i==LEFT) {
-					temp[j]=ary[i][startRow][j];
-				}
-				ary[i][startRow][j]=ary[i+1][startRow][j];
-			}
-		}
 		for(int i=0; i<3; i++) {
+			temp[i]=ary[LEFT][startRow][i];
+			ary[LEFT][startRow][i]=ary[FRONT][startRow][i];
+			ary[FRONT][startRow][i]=ary[RIGHT][startRow][i];
+			ary[RIGHT][startRow][i]=ary[BACK][startRow][i];
 			ary[BACK][startRow][i]=temp[i];
 		}
 		printAry(ary);
 	}
 	public void rightMove(char[][][] ary, int startRow) {
+//		char[] temp=new char[3];
+//		for(int i=BACK; i>LEFT; i--) {
+//			for(int j=0; j<3; j++) {
+//				if(i==BACK) {
+//					temp[j]=ary[i][startRow][j];
+//				}
+//				ary[i][startRow][j]=ary[i-1][startRow][j];
+//			}
+//		}
+//		for(int i=0; i<3; i++) {
+//			ary[LEFT][startRow][i]=temp[i];
+//		}
+		// 이중 for문보다 간결하여 가독성이 좋아보임
 		char[] temp=new char[3];
-		for(int i=BACK; i>LEFT; i--) {
-			for(int j=0; j<3; j++) {
-				if(i==BACK) {
-					temp[j]=ary[i][startRow][j];
-				}
-				ary[i][startRow][j]=ary[i-1][startRow][j];
-			}
-		}
 		for(int i=0; i<3; i++) {
+			temp[i]=ary[BACK][startRow][i];
+			ary[BACK][startRow][i]=ary[RIGHT][startRow][i];
+			ary[RIGHT][startRow][i]=ary[FRONT][startRow][i];
+			ary[FRONT][startRow][i]=ary[LEFT][startRow][i];
 			ary[LEFT][startRow][i]=temp[i];
+		}
+		printAry(ary);
+	}
+	public void downMove(char[][][] ary, int startRow) {
+		char[] temp=new char[3];
+		for(int i=0; i<3; i++) {
+			temp[i]=ary[BACK][i][startRow];
+			ary[BACK][i][startRow]=ary[DOWN][i][startRow];
+			ary[DOWN][i][startRow]=ary[FRONT][i][startRow];
+			ary[FRONT][i][startRow]=ary[UP][i][startRow];
+			ary[UP][i][startRow]=temp[i];
+		}
+		printAry(ary);
+	}
+	public void upMove(char[][][] ary, int startRow) {
+		char[] temp=new char[3];
+		for(int i=0; i<3; i++) {
+			temp[i]=ary[UP][i][startRow];
+			ary[UP][i][startRow]=ary[FRONT][i][startRow];
+			ary[FRONT][i][startRow]=ary[DOWN][i][startRow];
+			ary[DOWN][i][startRow]=ary[BACK][i][startRow];
+			ary[BACK][i][startRow]=temp[i];
+		}
+		printAry(ary);
+	}
+	public void fMove(char[][][] ary, int startRow) {
+		char[] temp=new char[3];
+		for(int i=0; i<3; i++) {
+			temp[i]=ary[LEFT][i][2];
+			ary[LEFT][i][2]=ary[DOWN][0][i];
+			ary[DOWN][0][i]=ary[RIGHT][i][0];
+			ary[RIGHT][i][0]=ary[UP][2][i];
+			ary[UP][2][i]=temp[i];
+		}
+		printAry(ary);
+		
+	}
+	public void f_Move(char[][][] ary, int startRow) {
+		char[] temp=new char[3];
+		for(int i=0; i<3; i++) {
+			temp[i]=ary[UP][2][i];
+			ary[UP][2][i]=ary[RIGHT][i][0];
+			ary[RIGHT][i][0]=ary[DOWN][0][i];
+			ary[DOWN][0][i]=ary[LEFT][i][2];
+			ary[LEFT][i][2]=temp[i];
 		}
 		printAry(ary);
 	}
