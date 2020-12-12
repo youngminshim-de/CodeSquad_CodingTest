@@ -65,7 +65,6 @@ class RubiksCube implements Face{
 		int end=ary[0].length-1;
 		for(String command :commandAry) {
 			if(command!=null) {
-				System.out.println(command);
 				switch(command) {
 				case "U": leftMove(ary,start);break;
 				case "U'": rightMove(ary,start);break;
@@ -79,9 +78,10 @@ class RubiksCube implements Face{
 				case "F'":f_Move(ary,end);break;
 				case "B": fMove(ary,start);break;
 				case "B'":f_Move(ary,start);break;
-				case "Q":
 				}
-			}
+				System.out.println(command);
+				printAry(ary);
+			} else {break;}
 		}
 	}
 	public void leftMove(char[][][] ary,int startRow) {
@@ -105,7 +105,6 @@ class RubiksCube implements Face{
 			ary[RIGHT][startRow][i]=ary[BACK][startRow][i];
 			ary[BACK][startRow][i]=temp[i];
 		}
-		printAry(ary);
 	}
 	public void rightMove(char[][][] ary, int startRow) {
 //		char[] temp=new char[3];
@@ -129,7 +128,6 @@ class RubiksCube implements Face{
 			ary[FRONT][startRow][i]=ary[LEFT][startRow][i];
 			ary[LEFT][startRow][i]=temp[i];
 		}
-		printAry(ary);
 	}
 	public void downMove(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
@@ -140,7 +138,6 @@ class RubiksCube implements Face{
 			ary[FRONT][i][startRow]=ary[UP][i][startRow];
 			ary[UP][i][startRow]=temp[i];
 		}
-		printAry(ary);
 	}
 	public void upMove(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
@@ -151,7 +148,6 @@ class RubiksCube implements Face{
 			ary[DOWN][i][startRow]=ary[BACK][i][startRow];
 			ary[BACK][i][startRow]=temp[i];
 		}
-		printAry(ary);
 	}
 	public void fMove(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
@@ -164,10 +160,7 @@ class RubiksCube implements Face{
 			ary[DOWN][rotation][i]=ary[RIGHT][i][rotation];
 			ary[RIGHT][i][rotation]=ary[UP][startRow][i];
 			ary[UP][startRow][i]=temp[i];
-			
 		}
-		printAry(ary);
-		
 	}
 	public void f_Move(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
@@ -181,34 +174,48 @@ class RubiksCube implements Face{
 			ary[DOWN][rotation][i]=ary[LEFT][i][startRow];
 			ary[LEFT][i][startRow]=temp[i];
 		}
-		printAry(ary);
 	}
 }
 
 public class Step3 {
 	public static void main(String[] args) {
+		long startTime=System.currentTimeMillis();
 		char[][][] ary=new char[6][][];
 		RubiksCube cube=new RubiksCube(ary);
-		//동작입력받기
-		Scanner keyboard=new Scanner(System.in);
-		System.out.print("Cube> ");
-		String input=keyboard.nextLine();
-		// 입력받은 동작의 문자열을 담을 String형 배열 size는 임의의 max:10으로 결정
-		String[] commandAry=new String[10];
 		int cnt=0;
-		for(Character c:input.toCharArray()) {
-			// 뒤이어 '기호가 들어오면 기존에 commandAry에 합친다.(ex U+'=U')
-			if(c=='\'') {
-				commandAry[cnt-1]+="'";
-				// 뒤이어 '2가 들어오면 기존에 commandAry에 합친다.(ex U+2=U2)
-			} else if(c=='2'){
-				commandAry[cnt-1]+="2";
+		//동작입력받기
+		while(true) {
+			Scanner keyboard=new Scanner(System.in);
+			System.out.print("Cube> ");
+			String input=keyboard.nextLine();
+			// Q가 나오면 프로그램을 종료한다.
+			if(input.equals("Q")) {
+				System.out.println("조작갯수: "+cnt);
+				break;
 			}
-			// 입력받은 문자열을 하나씩 쪼개서 String 배열에 넣는다.
 			else {
-				commandAry[cnt++]=c.toString();
+				// 입력받은 동작의 문자열을 담을 String형 배열 size는 임의의 max:20으로 결정
+				String[] commandAry=new String[20];
+				cnt=0;
+				for(Character c:input.toCharArray()) {
+					// 뒤이어 '기호가 들어오면 기존에 commandAry에 합친다.(ex U+'=U')
+					if(c=='\'') {
+						commandAry[cnt-1]+="'";
+						// 뒤이어 2가 들어오면 기존에 이전 명령어를 commandAry에 하나더 추가한다.
+					} else if(c=='2'){
+						commandAry[cnt]=commandAry[cnt-1];
+						cnt++;
+					}
+					// 입력받은 문자열을 하나씩 쪼개서 String 배열에 넣는다.
+					else {
+						commandAry[cnt++]=c.toString();
+					}
+				}
+				cube.cubeMove(ary, commandAry);
 			}
 		}
-		cube.cubeMove(ary, commandAry);
+		// 경과시간을 출력한다.
+		long endTime=System.currentTimeMillis();
+		System.out.println("경과시간: " + (endTime-startTime)/1000 +"초");
 	}
 }
