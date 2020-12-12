@@ -45,10 +45,6 @@ class PlaneCube{
 				case "L'": upMove(ary,start);break;
 				case "B": rightMove(ary,end);break;
 				case "B'": leftMove(ary,end);break;
-				case "Q": System.out.println("Bye~");break;
-				}
-				if(s.equals("Q")) {
-					break;
 				}
 				System.out.println(s);
 				printAry(ary);
@@ -102,22 +98,28 @@ public class Step2 {
 		// 배열의 사이즈를 매개변수로 하는 PlaneCube의 Constructor
 		PlaneCube cube=new PlaneCube(ary);
 		
-		//동작입력받기
-		Scanner keyboard=new Scanner(System.in);
-		System.out.print("Cube> ");
-		String input=keyboard.nextLine();
-		// 입력받은 동작의 문자열을 담을 String형 배열 size는 임의의 max:10으로 결정
-		String[] actionStr=new String[10];
-		int cnt=0;
-		for(Character c:input.toCharArray()) {
-			// 뒤이어 '기호가 들어오면 기존에 actionStr에 합친다.(ex U+'=U')
-			if(c=='\'') {
-				actionStr[cnt-1]+="'";
-			} // 입력받은 문자열을 하나씩 쪼개서 String 배열에 넣는다.
-			else {
-				actionStr[cnt++]=c.toString();
+		while(true) {
+			//동작입력받기
+			Scanner keyboard=new Scanner(System.in);
+			System.out.print("Cube> ");
+			String input=keyboard.nextLine();
+			if(input.equals("Q")) {
+				System.out.println("Bye~");
+				break;
 			}
+			// 입력받은 동작의 문자열을 담을 String형 배열 size는 임의의 max:10으로 결정
+			String[] actionStr=new String[10];
+			int cnt=0;
+			for(Character c:input.toCharArray()) {
+				// 뒤이어 '기호가 들어오면 기존에 actionStr에 합친다.(ex U+'=U')
+				if(c=='\'') {
+					actionStr[cnt-1]+="'";
+				} // 입력받은 문자열을 하나씩 쪼개서 String 배열에 넣는다.
+				else {
+					actionStr[cnt++]=c.toString();
+				}
+			}
+			cube.cubeMove(ary, actionStr);
 		}
-		cube.cubeMove(ary, actionStr);
 	}
 }
