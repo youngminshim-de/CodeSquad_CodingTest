@@ -1,5 +1,6 @@
 package test.main;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 // 큐브(정육면체)의 각각의 면을 ENUM 형식으로 표현
@@ -60,7 +61,7 @@ class RubiksCube implements Face{
 		}
 	}
 	// U<->D 대칭(U=D', U'=D) // L<->R 대칭(L=R', L'=R) // F<->B 대칭 (F=B', F'=B)
-	public void cubeMove(char[][][] ary,String[] commandAry) {
+	public boolean cubeMove(char[][][] ary,String[] commandAry) {
 		int start=0;
 		int end=ary[0].length-1;
 		for(String command :commandAry) {
@@ -81,8 +82,15 @@ class RubiksCube implements Face{
 				}
 				System.out.println(command);
 				printAry(ary);
+				// 큐브의 모든면이 맞았는지 체크하는 함수 호출
+				// 모든면이 맞았다면 false를 return 하여 메인메소드를 중지시킨다.
+				if(checkCube(ary)) {
+					System.out.println("축하합니다. 큐브가 다 맞춰졌습니다.");
+					return false;
+				}
 			} else {break;}
 		}
+		return true;
 	}
 	public void leftMove(char[][][] ary,int startRow) {
 //		for(int i=LEFT;i<BACK;i++) {
@@ -175,6 +183,21 @@ class RubiksCube implements Face{
 			ary[LEFT][i][startRow]=temp[i];
 		}
 	}
+	// 모든면이 맞았는지 확인하는 함수
+	public boolean checkCube(char[][][] ary) {
+		char[][] tempAry=new char[3][3];
+		for(int i=0; i<ary.length; i++) {
+			for(int j=0; j<tempAry.length; j++) {
+				for(int k=0; k<tempAry.length; k++) {
+					tempAry[j][k]=ary[i][0][0];
+				}
+			}
+			if(!Arrays.deepEquals(tempAry, ary[i])) {
+				return false;
+			}
+		}
+		return true;
+	}
 }
 
 public class Step3 {
@@ -182,9 +205,10 @@ public class Step3 {
 		long startTime=System.currentTimeMillis();
 		char[][][] ary=new char[6][][];
 		RubiksCube cube=new RubiksCube(ary);
+		boolean isContinue=true;
 		int cnt=0;
 		//동작입력받기
-		while(true) {
+		while(isContinue) {
 			Scanner keyboard=new Scanner(System.in);
 			System.out.print("Cube> ");
 			String input=keyboard.nextLine();
@@ -211,7 +235,7 @@ public class Step3 {
 						commandAry[cnt++]=c.toString();
 					}
 				}
-				cube.cubeMove(ary, commandAry);
+				isContinue=cube.cubeMove(ary, commandAry);
 			}
 		}
 		// 경과시간을 출력한다.
