@@ -104,15 +104,13 @@ class RubiksCube implements Face{
 //		for(int i=0; i<3; i++) {
 //			ary[BACK][startRow][i]=temp[i];
 //		}
-		// 이중 for문보다 간결하여 가독성이 좋아보임
+		// 행 swap의 경우 모든 row를 swap 할 필요없이 참조값(주소값)만 전달해줘도 된다.
 		char[] temp=new char[3];
-		for(int i=0; i<3; i++) {
-			temp[i]=ary[LEFT][startRow][i];
-			ary[LEFT][startRow][i]=ary[FRONT][startRow][i];
-			ary[FRONT][startRow][i]=ary[RIGHT][startRow][i];
-			ary[RIGHT][startRow][i]=ary[BACK][startRow][i];
-			ary[BACK][startRow][i]=temp[i];
-		}
+		temp=ary[LEFT][startRow];
+		ary[LEFT][startRow]=ary[FRONT][startRow];
+		ary[FRONT][startRow]=ary[RIGHT][startRow];
+		ary[RIGHT][startRow]=ary[BACK][startRow];
+		ary[BACK][startRow]=temp;
 	}
 	public void rightMove(char[][][] ary, int startRow) {
 //		char[] temp=new char[3];
@@ -127,15 +125,13 @@ class RubiksCube implements Face{
 //		for(int i=0; i<3; i++) {
 //			ary[LEFT][startRow][i]=temp[i];
 //		}
-		// 이중 for문보다 간결하여 가독성이 좋아보임
+		// 행 swap의 경우 모든 row를 swap 할 필요없이 참조값(주소값)만 전달해줘도 된다.
 		char[] temp=new char[3];
-		for(int i=0; i<3; i++) {
-			temp[i]=ary[BACK][startRow][i];
-			ary[BACK][startRow][i]=ary[RIGHT][startRow][i];
-			ary[RIGHT][startRow][i]=ary[FRONT][startRow][i];
-			ary[FRONT][startRow][i]=ary[LEFT][startRow][i];
-			ary[LEFT][startRow][i]=temp[i];
-		}
+		temp=ary[BACK][startRow];
+		ary[BACK][startRow]=ary[RIGHT][startRow];
+		ary[RIGHT][startRow]=ary[FRONT][startRow];
+		ary[FRONT][startRow]=ary[LEFT][startRow];
+		ary[LEFT][startRow]=temp;
 	}
 	public void downMove(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
