@@ -75,10 +75,10 @@ class RubiksCube implements Face{
 				case "L'": upMove(ary,start);break;
 				case "R": upMove(ary,end);break;
 				case "R'": downMove(ary,end);break;
-				case "F": fMove(ary,start);break;
-				case "F'":f_Move(ary,start);break;
-				case "B":
-				case "B'":
+				case "F": fMove(ary,end);break;
+				case "F'":f_Move(ary,end);break;
+				case "B": fMove(ary,start);break;
+				case "B'":f_Move(ary,start);break;
 				case "Q":
 				}
 			}
@@ -155,24 +155,31 @@ class RubiksCube implements Face{
 	}
 	public void fMove(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
+		// 90도회전을 위한 숫자 배열의 index(startRow)가 0이 전달되면  2가 되고
+		// index가 2가 전달되면 0이된다.
+		int rotation=Math.abs(startRow-2);
 		for(int i=0; i<3; i++) {
-			temp[i]=ary[LEFT][i][2];
-			ary[LEFT][i][2]=ary[DOWN][0][i];
-			ary[DOWN][0][i]=ary[RIGHT][i][0];
-			ary[RIGHT][i][0]=ary[UP][2][i];
-			ary[UP][2][i]=temp[i];
+			temp[i]=ary[LEFT][i][startRow];
+			ary[LEFT][i][startRow]=ary[DOWN][rotation][i];
+			ary[DOWN][rotation][i]=ary[RIGHT][i][rotation];
+			ary[RIGHT][i][rotation]=ary[UP][startRow][i];
+			ary[UP][startRow][i]=temp[i];
+			
 		}
 		printAry(ary);
 		
 	}
 	public void f_Move(char[][][] ary, int startRow) {
 		char[] temp=new char[3];
+		// 90도회전을 위한 숫자 배열의 index(startRow)가 0이 전달되면  2가 되고
+		// index가 2가 전달되면 0이된다.
+		int rotation=Math.abs(startRow-2);
 		for(int i=0; i<3; i++) {
-			temp[i]=ary[UP][2][i];
-			ary[UP][2][i]=ary[RIGHT][i][0];
-			ary[RIGHT][i][0]=ary[DOWN][0][i];
-			ary[DOWN][0][i]=ary[LEFT][i][2];
-			ary[LEFT][i][2]=temp[i];
+			temp[i]=ary[UP][startRow][i];
+			ary[UP][startRow][i]=ary[RIGHT][i][rotation];
+			ary[RIGHT][i][rotation]=ary[DOWN][rotation][i];
+			ary[DOWN][rotation][i]=ary[LEFT][i][startRow];
+			ary[LEFT][i][startRow]=temp[i];
 		}
 		printAry(ary);
 	}
