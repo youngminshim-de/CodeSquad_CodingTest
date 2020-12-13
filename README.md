@@ -101,9 +101,9 @@ interface Face{
 </pre>
 ## public void downMove(char[][][] ary, int startRow)
 > upMove 함수와 동일하며, 방향만 반대이다.
->
-> row와 column 간의 이동도 일어나므로 새로 추가한 코드이다. (즉 90도 회전을 위한 함수)
+
 ## public void fMove(char[][][] ary, int startRow)
+> row와 column 간의 이동도 일어나므로 새로 추가한 코드이다. (즉 90도 회전을 위한 함수)
 > LEFT(column)<-DOWN(row)<-RIGHT(column)<-UP(row) (Action F&B)
 <pre>
 <code>
